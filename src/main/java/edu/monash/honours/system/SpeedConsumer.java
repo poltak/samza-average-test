@@ -1,5 +1,6 @@
 package edu.monash.honours.system;
 
+import edu.monash.honours.util.SpeedReadingPair;
 import org.apache.samza.Partition;
 import org.apache.samza.system.IncomingMessageEnvelope;
 import org.apache.samza.system.SystemStreamPartition;
@@ -44,9 +45,12 @@ public class SpeedConsumer extends BlockingEnvelopeMap
     try {
       while ((inputStream = serverSocket.accept().getInputStream()) != null) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        double speedReading = Double.valueOf(bufferedReader.readLine());
 
         put(systemStreamPartition,
-            new IncomingMessageEnvelope(systemStreamPartition, null, null, bufferedReader.readLine()));
+            new IncomingMessageEnvelope(systemStreamPartition, null, null, new SpeedReadingPair(speedReading, false)));
+
+        bufferedReader.close();
       }
     } catch (IOException e) {
       put(systemStreamPartition, new IncomingMessageEnvelope(systemStreamPartition, null, null,
