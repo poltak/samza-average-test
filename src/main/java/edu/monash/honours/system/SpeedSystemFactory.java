@@ -9,7 +9,7 @@ import org.apache.samza.system.SystemFactory;
 import org.apache.samza.system.SystemProducer;
 import org.apache.samza.util.SinglePartitionWithoutOffsetsSystemAdmin;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class SpeedSystemFactory implements SystemFactory
 {
@@ -18,11 +18,11 @@ public class SpeedSystemFactory implements SystemFactory
   @Override
   public SystemConsumer getConsumer(final String systemName, final Config config, final MetricsRegistry metricsRegistry)
   {
-    String pathToInputFile = config.get("systems." + systemName + ".inputpath");
+    int listeningPort = Integer.getInteger(config.get("systems." + systemName + ".listeningPort"));
 
     try {
-      return new SpeedConsumer(systemName, OUTPUT_STREAM_NAME, pathToInputFile);
-    } catch (FileNotFoundException e) {
+      return new SpeedConsumer(systemName, OUTPUT_STREAM_NAME, listeningPort);
+    } catch (IOException e) {
       e.printStackTrace();
       return null;
     }
