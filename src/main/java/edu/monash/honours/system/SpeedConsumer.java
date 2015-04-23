@@ -22,7 +22,7 @@ public class SpeedConsumer extends BlockingEnvelopeMap {
 
   @Override
   public void start() {
-    Thread fileReadingThread = new Thread(
+    new Thread(
       () -> {
         try {
           readLines();
@@ -31,7 +31,6 @@ public class SpeedConsumer extends BlockingEnvelopeMap {
         }
       }
     );
-
   }
 
   // TODO: extract speed from lines and send that out
