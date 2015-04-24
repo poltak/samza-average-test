@@ -30,9 +30,9 @@ public class SpeedConsumer extends BlockingEnvelopeMap
     new Thread(
       () -> {
         try {
-          listenOnPort();
+          SpeedConsumer.this.listenOnPort();
         } catch (InterruptedException e) {
-          stop();
+          SpeedConsumer.this.stop();
         }
       }
     );
