@@ -1,32 +1,56 @@
 package edu.monash.honours.util;
 
 import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
 
-public class SpeedReadingPair extends AbstractMap.SimpleEntry<Double, Boolean>
+public class SpeedReadingPair
 {
-  public SpeedReadingPair(final Double key, final Boolean value)
+  private final double key;
+  private boolean value;
+
+  public SpeedReadingPair(final double key, final boolean value)
   {
-    super(key, value);
+    this.key = key;
+    this.value = value;
+  }
+
+  public SpeedReadingPair(Map<String, Object> jsonObject)
+  {
+    this((Double) jsonObject.get("speed"), (Boolean) jsonObject.get("flag"));
   }
 
   @Override
   public String toString()
   {
-    return "{" + this.getKey() + ": " + this.getValue() + "}";
+    return "{" + this.key + ":" + this.value + "}";
   }
 
   public double getSpeed()
   {
-    return this.getKey();
+    return this.key;
   }
 
   public boolean flagged()
   {
-    return this.getValue();
+    return this.value;
   }
 
   public void flag()
   {
-    this.setValue(true);
+    this.value = true;
+  }
+
+  public static Map<String, Object> toMap(SpeedReadingPair pair) {
+    Map<String, Object> jsonObject = new HashMap<String, Object>();
+
+    jsonObject.put("speed", pair.getSpeed());
+    jsonObject.put("flag", pair.flagged());
+
+    return jsonObject;
+  }
+
+  public static String toJson(SpeedReadingPair pair) {
+    return pair.toString();
   }
 }

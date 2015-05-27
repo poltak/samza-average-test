@@ -8,6 +8,8 @@ import org.apache.samza.task.MessageCollector;
 import org.apache.samza.task.StreamTask;
 import org.apache.samza.task.TaskCoordinator;
 
+import java.util.Map;
+
 public class SpeedCheckStreamTask implements StreamTask
 {
   // Constants
@@ -36,6 +38,7 @@ public class SpeedCheckStreamTask implements StreamTask
   public void process(final IncomingMessageEnvelope incomingMessageEnvelope, final MessageCollector messageCollector,
                       final TaskCoordinator taskCoordinator) throws Exception
   {
+    /*
     SpeedReadingPair speedReadingPair = (SpeedReadingPair) incomingMessageEnvelope.getMessage();
     this.messageCount++;  // Keep count of number of messages that come through here
     totalMessageCount += this.messageCount; // Keep count of total number of messages received on this stream.
@@ -49,6 +52,9 @@ public class SpeedCheckStreamTask implements StreamTask
 
     // Send speed on for further processing
     messageCollector.send(new OutgoingMessageEnvelope(SPEED_CHECK_OUTPUT, speedReadingPair));
+    */
+    Map<String, Object> outgoingMap = SpeedReadingPair.toMap((SpeedReadingPair) incomingMessageEnvelope.getMessage());
+    messageCollector.send(new OutgoingMessageEnvelope(SPEED_CHECK_OUTPUT, outgoingMap));
 
   }
 }
